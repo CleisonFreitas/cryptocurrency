@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\DB;
 class CryptoController extends Controller
 {
    
-    public function index()
+    public function index(Request $request)
     {
         try{
-            $get_currency = $this->getCurrency();
+            $get_currency = $this->getCurrency($request->coin_id);
 
             if(isset($get_currency['error'])) {
                 throw new \Exception($get_currency['error']);
@@ -27,7 +27,7 @@ class CryptoController extends Controller
             }
 
 
-            $coin_at_time = $this->CoinAtTime($coin['data']);
+            $coin_at_time = $this->CoinAtTime($coin['coin']);
 
             if(isset($coin_at_time['error'])){
                 throw new \Exception($coin_at_time['error']);
@@ -64,10 +64,10 @@ class CryptoController extends Controller
         //
     }
 
-    private function getCurrency()
+    private function getCurrency($coin_id)
     {
 
-            $url = "https://api.coingecko.com/api/v3/coins/bitcoin?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";
+            $url = "https://api.coingecko.com/api/v3/coins/$coin_id?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";
         
             $currency = curl_init('http://404.php.net/');
             curl_setopt($currency, CURLOPT_URL, $url);
@@ -115,7 +115,7 @@ class CryptoController extends Controller
                 throw new \Exception("There was an error trying to register");
             }
 
-            return ['data' => new CoinResource($coin_register)];
+            return ['coin' => new CoinResource($coin_register)];
 
         }catch(\Exception $ex){
             return ['error' => $ex->getMessage()];
@@ -127,7 +127,8 @@ class CryptoController extends Controller
     {
         try{
             $current_notation = Crypto::create([
-                'coin_name' => $coin->id,
+                'coin_id' => $coin->coin_id,
+                'coin_name' => $coin->coin_name,
                 'price_at_time' => $coin->current_price
             ]);
     

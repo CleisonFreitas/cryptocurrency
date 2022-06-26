@@ -12,14 +12,10 @@ class Crypto extends Model
     protected $table = 'crypto_notation';
 
     protected $fillable = [
+        'coin_id',
         'coin_name',
         'price_at_time',
     ];
 
     public $timestamps = true;
-
-    static function coin_currency()
-    {
-        $coin = Self::paginate();
-    }
 }

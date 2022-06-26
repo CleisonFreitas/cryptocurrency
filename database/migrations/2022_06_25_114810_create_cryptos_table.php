@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('crypto_notation', function (Blueprint $table) {
             $table->id();
+            $table->string('coin_id',50);
             $table->string('coin_name',80);
             $table->double('price_at_time',10,2);
             $table->timestamps();
