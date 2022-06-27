@@ -14,7 +14,8 @@ class CryptoController extends Controller
     public function index(Request $request)
     {
         try{
-            $get_currency = $this->getCurrency($request->coin_id);
+            $coin_id = $request->coin_id ?? 'bitcoin';
+            $get_currency = $this->getCurrency($coin_id);
 
             if(isset($get_currency['error'])) {
                 throw new \Exception($get_currency['error']);
@@ -40,28 +41,21 @@ class CryptoController extends Controller
         }
     }
 
-    
-    public function store(Request $request)
+    public function CoinOnPeriod(Request $request)
     {
-        //
-    }
+        try{
 
- 
-    public function show($id)
-    {
-        //
-    }
+            $page = $request->page ?? "1";
+            $st_period = date('Y-m-d h:m:i',strtotime($request->st_date. " ".$request->st_hour));
+            $end_period = date('Y-m-d h:m:i',strtotime($request->end_date. " ".$request->end_hour));
+            
+            $coin_period = Crypto::CurrencyPeriod($st_period,$end_period,$page);
 
-    
-    public function update(Request $request, $id)
-    {
-        //
-    }
+            return response()->json($coin_period,200);
 
- 
-    public function destroy($id)
-    {
-        //
+        }catch(\Exception $ex) {
+            return response()->json($ex->getMessage(),404);
+        }
     }
 
     private function getCurrency($coin_id)

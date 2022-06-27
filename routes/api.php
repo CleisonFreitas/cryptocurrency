@@ -22,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResources([
     'currency' => CryptoController::class,
 ]);
+
+Route::match(['get','post'],'coin_period', [CryptoController::class,'CoinOnPeriod']);
