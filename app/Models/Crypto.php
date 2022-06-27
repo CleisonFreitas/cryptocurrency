@@ -29,7 +29,14 @@ class Crypto extends Model
     protected function CreatedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date('Y-m-d h:m:i ',strtotime($value)),
+            get: fn ($value) => date('d-m-Y h:m:i ',strtotime($value)),
+        );
+    }
+
+    protected function PriceAtTime(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => number_format($value,2,',','.'),
         );
     }
 

@@ -15,8 +15,9 @@ class CryptoController extends Controller
     {
         try{
             $coin_id = $request->coin_id ?? 'bitcoin';
-            $period = null;
-            $get_currency = $this->getCurrency($coin_id, $period);
+
+            $url = "https://api.coingecko.com/api/v3/coins/$coin_id?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";
+            $get_currency = $this->getCurrency($url);
 
             if(isset($get_currency['error'])) {
                 throw new \Exception($get_currency['error']);
@@ -29,12 +30,6 @@ class CryptoController extends Controller
             }
 
 
-            $coin_at_time = $this->CoinAtTime($coin['coin']);
-
-            if(isset($coin_at_time['error'])){
-                throw new \Exception($coin_at_time['error']);
-            }
-
             return response()->json($coin,200);
 
         }catch(\Exception $ex) {
@@ -42,54 +37,53 @@ class CryptoController extends Controller
         }
     }
 
-    public function CoinOnPeriod(Request $request,string $coin_id = "bitcoin")
+    public function CoinOnPeriod(string $coin_id = "bitcoin",$date)
     {
         try{
 
-            $page = $request->page ?? "1";
+            $url = "https://api.coingecko.com/api/v3/coins/$coin_id/history?date=$date&localization=false";
 
-            $st_period = date('Y-m-d h:m:i',strtotime($request->st_date. " ".$request->st_hour));
-            $end_period = date('Y-m-d h:m:i',strtotime($request->end_date. " ".$request->end_hour));
-            
-            $coin_period = Crypto::CurrencyPeriod($st_period,$end_period,$coin_id,$page);
+            $get_currency = $this->getCurrency($url);
 
-            return response()->json($coin_period,200);
+            if(isset($get_currency['error'])) {
+                throw new \Exception($get_currency['error']);
+            }
+
+            $coin_at_time = $this->CoinAtTime($get_currency['data']);
+
+            if(isset($coin_at_time['error'])){
+                throw new \Exception($coin_at_time['error']);
+            }
+            return response()->json($coin_at_time,200);
 
         }catch(\Exception $ex) {
             return response()->json($ex->getMessage(),404);
         }
     }
 
-    private function getCurrency($coin_id,$period)
+    private function getCurrency($url)
     {
+        $currency = curl_init('http://404.php.net/');
+        curl_setopt($currency, CURLOPT_URL, $url);
+        curl_setopt($currency, CURLOPT_HEADER, false);
+        curl_setopt($currency, CURLOPT_NOBODY, false);
+        curl_setopt($currency, CURLOPT_RETURNTRANSFER, true);
+        $curl = curl_exec($currency);
+        curl_close($currency);
 
-            if($period == null){
-                $url = "https://api.coingecko.com/api/v3/coins/$coin_id?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";     
-            }
+        $get_content = json_decode($curl);
 
-            $url = "https://api.coingecko.com/api/v3/coins/bitcoin/history?date=27-06-2022&localization=false";
-        
-            $currency = curl_init('http://404.php.net/');
-            curl_setopt($currency, CURLOPT_URL, $url);
-            curl_setopt($currency, CURLOPT_HEADER, false);
-            curl_setopt($currency, CURLOPT_NOBODY, false);
-            curl_setopt($currency, CURLOPT_RETURNTRANSFER, true);
-            $curl = curl_exec($currency);
-            curl_close($currency);
+        if(isset($get_content->error)){
+            return ['error' => "Could not find coin with the given id"];
+        }
 
-            $get_content = json_decode($curl);
+        $details = [
+            'coin_id' => $get_content->id,
+            'coin_name' => $get_content->name,
+            'current_price' => $get_content->market_data->current_price->usd
+        ];
 
-            if(isset($get_content->error)){
-                return ['error' => "Could not find coin with the given id"];
-            }
-
-            $details = [
-                'coin_id' => $get_content->id,
-                'coin_name' => $get_content->name,
-                'current_price' => $get_content->market_data->current_price->usd
-            ];
-
-            return ['data' => $details];
+        return ['data' => $details];
         
     }
 
@@ -123,20 +117,25 @@ class CryptoController extends Controller
 
     }
 
-    private function CoinAtTime(object $coin)
+    private function CoinAtTime(array $coin_data)
     {
         try{
             $current_notation = Crypto::create([
-                'coin_id' => $coin->coin_id,
-                'coin_name' => $coin->coin_name,
-                'price_at_time' => $coin->current_price
+                'coin_id' => $coin_data['coin_id'],
+                'coin_name' => $coin_data['coin_name'],
+                'price_at_time' => $coin_data['current_price']
             ]);
     
             if($current_notation == false){
                 throw new \Exception("There was an error trying to register");
             }
     
-            return ['data' => $current_notation];
+            return ['data' => [
+                'coin_id' => $current_notation->coin_id,
+                'coin_name' => $current_notation->coin_name,
+                'price_at_time(usd)' => $current_notation->price_at_time,
+                'registered' => $current_notation->created_at
+            ]];
 
         }catch(\Exception $ex){
             return ['error' => $ex->getMessage()];
@@ -144,8 +143,4 @@ class CryptoController extends Controller
         
     }
 
-    private function coin_history()
-    {
-        $url = "https://api.coingecko.com/api/v3/coins/bitcoin/history?date=27-06-2022&localization=false";
-    }
 }
