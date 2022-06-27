@@ -15,7 +15,8 @@ class CryptoController extends Controller
     {
         try{
             $coin_id = $request->coin_id ?? 'bitcoin';
-            $get_currency = $this->getCurrency($coin_id);
+            $period = null;
+            $get_currency = $this->getCurrency($coin_id, $period);
 
             if(isset($get_currency['error'])) {
                 throw new \Exception($get_currency['error']);
@@ -59,10 +60,14 @@ class CryptoController extends Controller
         }
     }
 
-    private function getCurrency($coin_id)
+    private function getCurrency($coin_id,$period)
     {
 
-            $url = "https://api.coingecko.com/api/v3/coins/$coin_id?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";
+            if($period == null){
+                $url = "https://api.coingecko.com/api/v3/coins/$coin_id?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";     
+            }
+
+            $url = "https://api.coingecko.com/api/v3/coins/bitcoin/history?date=27-06-2022&localization=false";
         
             $currency = curl_init('http://404.php.net/');
             curl_setopt($currency, CURLOPT_URL, $url);
@@ -137,5 +142,10 @@ class CryptoController extends Controller
             return ['error' => $ex->getMessage()];
         }
         
+    }
+
+    private function coin_history()
+    {
+        $url = "https://api.coingecko.com/api/v3/coins/bitcoin/history?date=27-06-2022&localization=false";
     }
 }
