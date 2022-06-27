@@ -41,15 +41,16 @@ class CryptoController extends Controller
         }
     }
 
-    public function CoinOnPeriod(Request $request)
+    public function CoinOnPeriod(Request $request,string $coin_id = "bitcoin")
     {
         try{
 
             $page = $request->page ?? "1";
+
             $st_period = date('Y-m-d h:m:i',strtotime($request->st_date. " ".$request->st_hour));
             $end_period = date('Y-m-d h:m:i',strtotime($request->end_date. " ".$request->end_hour));
             
-            $coin_period = Crypto::CurrencyPeriod($st_period,$end_period,$page);
+            $coin_period = Crypto::CurrencyPeriod($st_period,$end_period,$coin_id,$page);
 
             return response()->json($coin_period,200);
 

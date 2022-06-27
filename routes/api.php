@@ -23,4 +23,4 @@ Route::apiResources([
     'currency' => CryptoController::class,
 ]);
 
-Route::match(['get','post'],'coin_period', [CryptoController::class,'CoinOnPeriod']);
+Route::match(['get','post'],'coin_period/{coin_id?}', [CryptoController::class,'CoinOnPeriod']);

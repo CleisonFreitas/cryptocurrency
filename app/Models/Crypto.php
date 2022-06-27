@@ -33,9 +33,10 @@ class Crypto extends Model
         );
     }
 
-    static function CurrencyPeriod($st_period,$end_period,$page)
+    static function CurrencyPeriod($st_period,$end_period,$coin,$page)
     {
         $coin_period = Crypto::WhereBetween('created_at', [$st_period,$end_period])
+        ->where('coin_id',$coin)
         ->paginate($perPage = 10, $columns = ['*'], $pageName = 'page');
 
         $data = [];
