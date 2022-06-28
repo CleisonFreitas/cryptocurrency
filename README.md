@@ -27,7 +27,7 @@ php artisan serve
 ```
 
 <h2>4. Running the API</h2>
-<p>The Crypto-Wallet API uses [Coingecko](https://www.coingecko.com/) as a base to generate cryptocurrency values. Its search is based on the “coin_id” of each currency and, by default, API returns the updated bitcoin value. This value is saved in the database, “coin” table, and once it is saved, it will be updated whenever there is the last query and the value is different from what was recorded in the query.</p>
+<p>The Crypto-Wallet API uses [Coingecko](https://coingecko.com/) as a base to generate cryptocurrency values. Its search is based on the “coin_id” of each currency and, by default, API returns the updated bitcoin value. This value is saved in the database, “coin” table, and once it is saved, it will be updated whenever there is the last query and the value is different from what was recorded in the query.</p>
 
 
 Try:
