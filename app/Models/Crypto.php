@@ -16,6 +16,7 @@ class Crypto extends Model
         'coin_id',
         'coin_name',
         'price_at_time',
+        'query_date'
     ];
 
     public $timestamps = true;

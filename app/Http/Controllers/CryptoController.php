@@ -74,7 +74,7 @@ class CryptoController extends Controller
                 throw new \Exception($get_currency['error']);
             }
 
-            $coin_at_time = $this->CoinAtTime($get_currency['data']);
+            $coin_at_time = $this->CoinAtTime($get_currency['data'],$date);
 
             if(isset($coin_at_time['error'])){
                 throw new \Exception($coin_at_time['error']);
@@ -142,13 +142,15 @@ class CryptoController extends Controller
 
     }
 
-    private function CoinAtTime(array $coin_data)
+    private function CoinAtTime(array $coin_data,$date)
     {
         try{
+            
             $current_notation = Crypto::create([
                 'coin_id' => $coin_data['coin_id'],
                 'coin_name' => $coin_data['coin_name'],
-                'price_at_time' => $coin_data['current_price']
+                'price_at_time' => $coin_data['current_price'],
+                'query_date' => $date
             ]);
     
             if($current_notation == false){
