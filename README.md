@@ -55,7 +55,7 @@ Below, API being tested in Postman:
 ![postman-img](https://user-images.githubusercontent.com/54112790/176083900-5b11abd1-d2d4-49ae-a996-fee6033f8825.PNG)
 
 
-<p>Note: The config/database file is set to __postgresql__ by default. If you want to use MySQL, it is recommended that you change to __mysql__ on line 18</p>
+<p>Note: The config/database file is set to postgresql by default. If you want to use MySQL, it is recommended that you change to mysql on line 18</p>
 
 ```
 'default' => env('DB_CONNECTION', 'mysql'),
