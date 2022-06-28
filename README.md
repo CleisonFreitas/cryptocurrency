@@ -1,7 +1,7 @@
 # api-crypto-wallet
 
 <p> 
-    Developed in Laravel, Crypto-Wallet is an API capable of bringing the updated values of cryptocurrencies, such as Bitcoin, Ethereum, Celo, Gala, and other currencies with market value. It is also possible to search for values at specific times, simply by choosing the date you want to consult.
+    Developed in Laravel, Crypto-Wallet is an API capable of bringing the updated values of cryptocurrencies, such as Bitcoin, Ethereum, Celo, Gala, and other currencies with market value. It is also possible to search for values at specific times, simply by choosing the date you want to consult. The coin price will be returned in Dolar(USD).
 </p>
 
 <h2>
@@ -32,18 +32,51 @@ php artisan serve
 Try:
 
 __http://localhost:8000/api/coin_currency__
+```
+{
+    "coin": {
+        "coin_name": "Bitcoin",
+        "coin_id": "bitcoin",
+        "current_price(usd)": "21.030,00",
+        "last_updated": "28-06-2022 08:06:34"
+    }
+}
+```
 
 If you want to search for another currency, just add your id to the url:
 
 __http://localhost:8000/api/coin_currency/ethereum__
 
+```
+{
+    "coin": {
+        "coin_name": "Ethereum",
+        "coin_id": "ethereum",
+        "current_price(usd)": "1.226,10",
+        "last_updated": "28-06-2022 08:06:35"
+    }
+}
+```
+
 Another way to use it is by consulting the value of these coins in specific periods:
 
 __http://localhost:8000/api/coin_period/27-06-2022__
 
+```
+{
+    "data": {
+        "coin_id": "bitcoin",
+        "coin_name": "Bitcoin",
+        "price_at_time(usd)": "21.052,81"
+    }
+}
+```
+
 The query will return the value of bitcoin on the date 2022-06-27. To look up the value of another currency, just add its coin_id to the URL:
 
 __http://localhost:8000/api/coin_period/27-06-2022/ethereum__
+
+__Note: Sempre que uma consulta é feita, o seu registro permanece no banco de dados.__
 
 Some coins you can try too: luna-rush, celo, pstake-staked-atom, and dacxi
 It is also possible to test through the online API link:
