@@ -27,8 +27,7 @@ php artisan serve
 ```
 
 <h2>4. Running the API</h2>
-<p>The Crypto-Wallet API uses [Coingecko](https://coingecko.com/) as a base to generate cryptocurrency values. Its search is based on the “coin_id” of each currency and, by default, API returns the updated bitcoin value. This value is saved in the database, “coin” table, and once it is saved, it will be updated whenever there is the last query and the value is different from what was recorded in the query.</p>
-
+<p>Its search is based on the “coin_id” of each currency and, by default, API returns the updated bitcoin value. This value is saved in the database, “coin” table, and once it is saved, it will be updated whenever there is the last query and the value is different from what was recorded in the query.</p>
 
 Try:
 
@@ -52,13 +51,13 @@ It is also possible to test through the online API link:
 __https://api-crypto-wallet.herokuapp.com/__
 
 <div align="center>
-    <img src="https://user-images.githubusercontent.com/54112790/176082424-b5eb23e1-95c0-4368-9b05-32e22e850f52.PNG" width="700px" />
+<img src="https://user-images.githubusercontent.com/54112790/176082424-b5eb23e1-95c0-4368-9b05-32e22e850f52.png" width="700px" />
 </div>
 
 <p>Note: The config/database file is set to __postgresql__ by default. If you want to use MySQL, it is recommended that you change to __mysql__ on line 18</p>
 
 ```
-'default' => env('DB_CONNECTION', 'pgsql'),
+'default' => env('DB_CONNECTION', 'mysql'),
 ```
 
 
