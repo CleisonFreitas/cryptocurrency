@@ -50,9 +50,10 @@ It is also possible to test through the online API link:
 
 __https://api-crypto-wallet.herokuapp.com/__
 
-<div align="center>
-<img src="https://user-images.githubusercontent.com/54112790/176082424-b5eb23e1-95c0-4368-9b05-32e22e850f52.png" width="700px" />
-</div>
+Below, API being tested in Postman:
+
+![postman-img](https://user-images.githubusercontent.com/54112790/176083900-5b11abd1-d2d4-49ae-a996-fee6033f8825.PNG)
+
 
 <p>Note: The config/database file is set to __postgresql__ by default. If you want to use MySQL, it is recommended that you change to __mysql__ on line 18</p>
 
