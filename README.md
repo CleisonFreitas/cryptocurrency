@@ -1,8 +1,6 @@
 # api-crypto-wallet
 
-<h3>
     Developed in Laravel, Crypto-Wallet is an API capable of bringing the updated values of cryptocurrencies, such as Bitcoin, Ethereum, Celo, Gala, and other currencies with market value. It is also possible to search for values at specific times, simply by choosing the date you want to consult.
-</h3>
 
 <h2>
     Get started
@@ -27,7 +25,7 @@ php artisan serve
 ```
 
 <h2>4. Running the API</h2>
-The Crypto-Wallet API uses [Coingecko](https://www.coingecko.com/en/api/documentation) as a base to generate cryptocurrency values. This search is based on the “coin_id” of each currency and, by default, API returns the updated bitcoin value. This value is saved in the database, “coin” table, and once it is saved, it will be updated whenever there is the last query and the value is different from what was recorded in the query.
+The Crypto-Wallet API uses [Coingecko](https://www.coingecko.com/en/api/documentation/) as a base to generate cryptocurrency values. This search is based on the “coin_id” of each currency and, by default, API returns the updated bitcoin value. This value is saved in the database, “coin” table, and once it is saved, it will be updated whenever there is the last query and the value is different from what was recorded in the query.
 
 Try:
 
