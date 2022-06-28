@@ -37,10 +37,35 @@ class CryptoController extends Controller
         }
     }
 
-    public function CoinOnPeriod(string $coin_id = "bitcoin",$date)
+    public function GetCoin(string $coin_id = 'bitcoin')
     {
         try{
+            //Getting data from api and saving on coin table
+            $url = "https://api.coingecko.com/api/v3/coins/$coin_id?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";
+            $get_currency = $this->getCurrency($url);
 
+            if(isset($get_currency['error'])) {
+                throw new \Exception($get_currency['error']);
+            }
+
+            $coin = $this->saveCoin($get_currency['data']);
+            
+            if(isset($coin['error'])){
+                throw new \Exception($coin['error']);
+            }
+
+
+            return response()->json($coin,200);
+
+        }catch(\Exception $ex) {
+            return response()->json(['error' => [$ex->getMessage()]],404);
+        }
+    }
+
+    public function CoinOnPeriod(string $date,string $coin_id = "bitcoin")
+    {
+        try{
+            //Getting the data of the coin on period and saving the register on crypto_notation
             $url = "https://api.coingecko.com/api/v3/coins/$coin_id/history?date=$date&localization=false";
 
             $get_currency = $this->getCurrency($url);
@@ -134,7 +159,6 @@ class CryptoController extends Controller
                 'coin_id' => $current_notation->coin_id,
                 'coin_name' => $current_notation->coin_name,
                 'price_at_time(usd)' => $current_notation->price_at_time,
-                'registered' => $current_notation->created_at
             ]];
 
         }catch(\Exception $ex){
