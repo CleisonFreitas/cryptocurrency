@@ -51,6 +51,14 @@ It is also possible to test through the online API link:
 
 __https://api-crypto-wallet.herokuapp.com/__
 
-<p>Note: The config/database file is set to __postgresql__ by default. If you want to use MySQL, it is recommended that you change to __mysql__</p>
+<div align="center>
+    <img src="https://user-images.githubusercontent.com/54112790/176082424-b5eb23e1-95c0-4368-9b05-32e22e850f52.PNG" width="700px" />
+</div>
+
+<p>Note: The config/database file is set to __postgresql__ by default. If you want to use MySQL, it is recommended that you change to __mysql__ on line 18</p>
+
+```
+'default' => env('DB_CONNECTION', 'pgsql'),
+```
 
 
