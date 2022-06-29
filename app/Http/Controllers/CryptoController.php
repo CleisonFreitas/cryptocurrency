@@ -10,33 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class CryptoController extends Controller
 {
-   
-    public function index(Request $request)
-    {
-        try{
-            $coin_id = $request->coin_id ?? 'bitcoin';
-
-            $url = "https://api.coingecko.com/api/v3/coins/$coin_id?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false";
-            $get_currency = $this->getCurrency($url);
-
-            if(isset($get_currency['error'])) {
-                throw new \Exception($get_currency['error']);
-            }
-
-            $coin = $this->saveCoin($get_currency['data']);
-            
-            if(isset($coin['error'])){
-                throw new \Exception($coin['error']);
-            }
-
-
-            return response()->json($coin,200);
-
-        }catch(\Exception $ex) {
-            return response()->json(['error' => [$ex->getMessage()]],404);
-        }
-    }
-
+    
     public function GetCoin(string $coin_id = 'bitcoin')
     {
         try{
@@ -115,6 +89,7 @@ class CryptoController extends Controller
     private function saveCoin(array $coin_data)
     {
         try{
+            //Saving or updating the coin value on coin table
             $coin = Coin::Where('coin_id',$coin_data['coin_id'])->first();
 
             if(empty($coin)){
@@ -145,7 +120,7 @@ class CryptoController extends Controller
     private function CoinAtTime(array $coin_data,$date)
     {
         try{
-            
+            //Saving the data into crypto_notation table
             $current_notation = Crypto::create([
                 'coin_id' => $coin_data['coin_id'],
                 'coin_name' => $coin_data['coin_name'],
