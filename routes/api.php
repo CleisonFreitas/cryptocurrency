@@ -21,4 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('coin_currency/{coin_id?}',      [CryptoController::class,'GetCoin']);
-Route::get('coin_period/{date}/{coin_id?}', [CryptoController::class,'CoinOnPeriod']);
+Route::get('coin_period/{date?}/{coin_id?}', [CryptoController::class,'CoinOnPeriod']);

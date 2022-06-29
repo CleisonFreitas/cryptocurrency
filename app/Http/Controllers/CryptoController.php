@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CoinResource;
 use App\Models\Coin;
 use App\Models\Crypto;
+use Carbon\Carbon;
+use DateTime;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CryptoController extends Controller
 {
-    
+
     public function GetCoin(string $coin_id = 'bitcoin')
     {
         try{
@@ -36,9 +39,17 @@ class CryptoController extends Controller
         }
     }
 
-    public function CoinOnPeriod(string $date,string $coin_id = "bitcoin")
+
+    public function CoinOnPeriod(string $date = "",string $coin_id = "bitcoin")
     {
         try{
+            // testing whether the date informed is valid
+            $testDate = $this->testDate($date);
+
+            if(isset($testDate['error'])){
+                throw new \Exception($testDate['error']);
+            }
+
             //Getting the data of the coin on period and saving the register on crypto_notation
             $url = "https://api.coingecko.com/api/v3/coins/$coin_id/history?date=$date&localization=false";
 
@@ -60,6 +71,28 @@ class CryptoController extends Controller
         }
     }
 
+    private function testDate(string $date)
+    {
+        try{
+
+            switch($date){
+                case(""):
+                    throw new \Exception("No date given for consultation.");  
+                break;
+
+                case($date > date('d-m-Y')):
+                    throw new \Exception("Enter a valid date, equal to or less than the current date.");
+                break;
+            }
+
+            return TRUE;
+
+        }catch(\Exception $ex){
+            return ['error' => $ex->getMessage()];
+        }
+        
+    }
+
     private function getCurrency($url)
     {
         $currency = curl_init('http://404.php.net/');
@@ -73,7 +106,11 @@ class CryptoController extends Controller
         $get_content = json_decode($curl);
 
         if(isset($get_content->error)){
-            return ['error' => "Could not find coin with the given id"];
+            return ['error' => "Could not find coin with the given id."];
+        }
+
+        if(empty($get_content->market_data)){
+            return ['error' => "This currency has no registered market value in the informed period."];
         }
 
         $details = [
@@ -143,5 +180,7 @@ class CryptoController extends Controller
         }
         
     }
+
+    
 
 }
